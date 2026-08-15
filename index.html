@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Dawat-e-Tabligh</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B4A3A">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dawat-e-Tabligh">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&family=Outfit:wght@300..700&family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400..700&display=swap');
+
+  :root{
+    --green-deep:#0B4A3A;
+    --green-mid:#146B54;
+    --green-glow:#1E8F70;
+    --gold:#C9A24B;
+    --gold-light:#E8D9A8;
+    --cream:#FBF7EC;
+    --card:#FFFFFF;
+    --ink:#1C2620;
+    --ink-soft:#5B675F;
+    --line:#E4DCC5;
+    --radius:18px;
+    --f-display:'Reem Kufi', sans-serif;
+    --f-body:'Outfit', sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:var(--f-body);
+    background: #E9E2CE;
+    color:var(--ink);
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  body.lang-ur{ --f-display:'Noto Nastaliq Urdu', serif; --f-body:'Noto Nastaliq Urdu', serif; }
+  body.lang-ur main, body.lang-ur header.top{ direction:rtl; text-align:right; }
+  body.lang-ur .quick-grid, body.lang-ur .adab-list li, body.lang-ur .faq-q, body.lang-ur .sifat-head, body.lang-ur .brand-row{
+    direction:rtl;
+  }
+  body.lang-ur .t-item{padding-left:0; padding-right:22px;}
+  body.lang-ur .timeline{padding-left:0; padding-right:22px;}
+  body.lang-ur .timeline::before{left:auto; right:6px;}
+  body.lang-ur .t-item::before{left:auto; right:-22px;}
+  body.lang-ur .note-box{border-left:none; border-right:3px solid var(--green-mid);}
+  body.lang-ur .faq-a-inner{padding:0 32px 16px 2px;}
+  body.lang-ur p, body.lang-ur .muted, body.lang-ur .card{line-height:2.1;}
+
+  /* ---------- App frame ---------- */
+  .app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:var(--cream);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 60px rgba(11,74,58,0.25);
+    overflow:hidden;
+  }
+
+  /* ---------- Language switch ---------- */
+  .lang-switch{
+    display:flex; gap:6px; position:relative; z-index:2; margin-top:14px;
+  }
+  .lang-switch button{
+    flex:1; padding:7px 4px; border-radius:10px; border:1px solid rgba(232,217,168,0.45);
+    background:rgba(255,255,255,0.06); color:var(--gold-light); font-family:'Outfit',sans-serif;
+    font-size:12px; font-weight:600; cursor:pointer; letter-spacing:0.3px;
+  }
+  .lang-switch button.active{ background:var(--gold); color:var(--green-deep); border-color:var(--gold);}
+
+  /* ---------- Geometric motif ---------- */
+  header.top{
+    position:relative;
+    background:linear-gradient(160deg, var(--green-deep), var(--green-mid) 70%);
+    color:var(--cream);
+    padding:26px 20px 20px;
+    z-index:1;
+    overflow:hidden;
+  }
+  header.top .star-field{position:absolute; inset:0; opacity:0.14;}
+  .brand-row{display:flex; align-items:center; gap:12px; position:relative; z-index:1;}
+  .star-mark{width:38px; height:38px; flex-shrink:0;}
+  .brand-text .arabic{
+    font-family:'Amiri', serif; font-size:20px; letter-spacing:1px; color:var(--gold-light);
+    line-height:1;
+  }
+  .brand-text h1{
+    font-family:'Reem Kufi', sans-serif; font-weight:600; font-size:22px; letter-spacing:0.5px; margin-top:3px;
+  }
+  header.top p.tag{
+    font-size:12.5px; color:var(--gold-light); margin-top:8px; position:relative; z-index:1; opacity:0.95;
+    border-top:1px solid rgba(232,217,168,0.25); padding-top:10px;
+  }
+
+  /* ---------- Content scroll area ---------- */
+  main{
+    flex:1;
+    overflow-y:auto;
+    padding:18px 16px 100px;
+    position:relative;
+    z-index:1;
+  }
+  section.page{display:none; animation:fadeIn .35s ease;}
+  section.page.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .eyebrow{
+    font-family:var(--f-display);
+    text-transform:uppercase; letter-spacing:1.5px; font-size:11px;
+    color:var(--green-mid); font-weight:600; margin-bottom:6px;
+  }
+  body.lang-ur .eyebrow{text-transform:none; letter-spacing:0; font-size:14px;}
+  h2.page-title{
+    font-family:var(--f-display); font-size:23px; color:var(--green-deep);
+    margin-bottom:14px; font-weight:600;
+  }
+  h3.block-title{
+    font-family:var(--f-display); font-size:16px; color:var(--green-deep);
+    margin:20px 0 10px; font-weight:600;
+  }
+  p{ font-size:14.5px; line-height:1.75; color:var(--ink);}
+  p + p{margin-top:10px;}
+  .muted{color:var(--ink-soft); font-size:13px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+    position:relative;
+  }
+  .card.gold-frame{
+    border:1.5px solid var(--gold);
+    background:linear-gradient(180deg,#FFFDF6,#FBF3DD);
+  }
+
+  .kalima-card{ text-align:center; padding:22px 16px;}
+  .kalima-card .ar{
+    font-family:'Amiri', serif; font-size:26px; color:var(--green-deep); line-height:1.9; direction:rtl;
+  }
+  .kalima-card .translit{ margin-top:10px; font-size:13.5px; color:var(--ink-soft); font-style:italic;}
+  .corner-star{position:absolute; width:16px; height:16px; opacity:0.55;}
+  .corner-star.tl{top:8px; left:8px;} .corner-star.tr{top:8px; right:8px; transform:scaleX(-1);}
+  .corner-star.bl{bottom:8px; left:8px; transform:scaleY(-1);} .corner-star.br{bottom:8px; right:8px; transform:scale(-1,-1);}
+
+  .quick-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px;}
+  .quick-tile{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:14px 12px; display:flex; flex-direction:column; gap:8px; cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .quick-tile:active{transform:scale(0.97);}
+  .quick-tile svg{width:22px; height:22px; color:var(--green-mid);}
+  .quick-tile span{font-size:13px; font-weight:600; color:var(--ink);}
+
+  .timeline{position:relative; padding-left:22px; margin-top:6px;}
+  .timeline::before{
+    content:""; position:absolute; left:6px; top:4px; bottom:4px; width:2px;
+    background:linear-gradient(var(--gold), var(--green-mid));
+  }
+  .t-item{position:relative; padding-bottom:20px;}
+  .t-item::before{
+    content:""; position:absolute; left:-22px; top:2px; width:11px; height:11px; border-radius:50%;
+    background:var(--gold); border:2px solid var(--cream); box-shadow:0 0 0 2px var(--green-mid);
+  }
+  .t-item .yr{font-family:var(--f-display); color:var(--green-deep); font-size:13px; font-weight:600;}
+  .t-item p{margin-top:3px;}
+
+  .sifat-card{
+    border-radius:var(--radius); padding:16px; margin-bottom:12px;
+    background:var(--card); border:1px solid var(--line);
+  }
+  .sifat-head{display:flex; align-items:center; gap:12px; cursor:pointer;}
+  .sifat-num{
+    width:34px; height:34px; border-radius:50%; background:var(--green-deep); color:var(--gold-light);
+    display:flex; align-items:center; justify-content:center; font-family:var(--f-display);
+    font-size:15px; flex-shrink:0;
+  }
+  .sifat-head h4{font-size:15.5px; color:var(--green-deep); font-family:var(--f-display); font-weight:600; flex:1;}
+  .chev{width:16px; height:16px; color:var(--ink-soft); transition:transform .25s ease; flex-shrink:0;}
+  .sifat-card.open .chev{transform:rotate(180deg);}
+  .sifat-body{max-height:0; overflow:hidden; transition:max-height .3s ease;}
+  .sifat-card.open .sifat-body{max-height:700px;}
+  .sifat-body-inner{padding-top:12px;}
+  .sifat-body-inner h5{font-size:12.5px; color:var(--gold); text-transform:uppercase; letter-spacing:1px; margin:10px 0 4px; font-weight:700;}
+  body.lang-ur .sifat-body-inner h5{text-transform:none; letter-spacing:0; font-size:14px;}
+  .sifat-body-inner h5:first-child{margin-top:2px;}
+
+  .adab-list{list-style:none; margin-top:8px;}
+  .adab-list li{
+    display:flex; gap:10px; padding:11px 0; border-bottom:1px dashed var(--line); font-size:14px; line-height:1.6;
+  }
+  body.lang-ur .adab-list li{line-height:2;}
+  .adab-list li:last-child{border-bottom:none;}
+  .adab-num{
+    flex-shrink:0; width:24px; height:24px; border-radius:7px; background:var(--gold-light); color:var(--green-deep);
+    font-family:var(--f-display); font-size:12px; display:flex; align-items:center; justify-content:center; font-weight:700;
+  }
+
+  .faq-item{border-bottom:1px solid var(--line);}
+  .faq-item:last-child{border-bottom:none;}
+  .faq-q{
+    display:flex; align-items:flex-start; gap:10px; padding:14px 2px; cursor:pointer;
+  }
+  .faq-q p{font-weight:600; font-size:14.5px; color:var(--ink); flex:1;}
+  .faq-mark{
+    flex-shrink:0; width:22px; height:22px; border-radius:50%; border:1.5px solid var(--green-mid);
+    color:var(--green-mid); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;
+    transition:all .2s ease;
+  }
+  .faq-item.open .faq-mark{background:var(--green-mid); color:#fff; transform:rotate(45deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .3s ease;}
+  .faq-item.open .faq-a{max-height:600px;}
+  .faq-a-inner{padding:0 2px 16px 32px; font-size:13.8px; color:var(--ink-soft); line-height:1.75;}
+
+  .note-box{
+    background:#F2F7F1; border-left:3px solid var(--green-mid); border-radius:10px; padding:12px 14px; margin-top:10px;
+    font-size:13px; color:var(--ink-soft); line-height:1.6;
+  }
+  body.lang-ur .note-box{line-height:2;}
+  .note-box b{color:var(--green-deep);}
+
+  .divider-star{display:flex; align-items:center; justify-content:center; gap:10px; margin:26px 0 14px;}
+  .divider-star::before, .divider-star::after{content:""; height:1px; flex:1; background:var(--line);}
+  .divider-star svg{width:18px; height:18px; color:var(--gold);}
+
+  nav.bottom{
+    position:absolute; bottom:0; left:0; right:0;
+    background:rgba(251,247,236,0.96);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    display:flex;
+    z-index:5;
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+  }
+  nav.bottom button{
+    flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:8px 2px; cursor:pointer; color:var(--ink-soft); font-family:var(--f-body);
+  }
+  nav.bottom button svg{width:20px; height:20px;}
+  nav.bottom button span{font-size:9.5px; font-weight:600; letter-spacing:0.2px;}
+  body.lang-ur nav.bottom button span{font-size:12px;}
+  nav.bottom button.active{color:var(--green-deep);}
+  nav.bottom button.active svg{color:var(--green-deep);}
+  nav.bottom button.active span{color:var(--green-deep);}
+
+  ::-webkit-scrollbar{width:0px;}
+</style>
+</head>
+<body class="lang-rm">
+<div class="app">
+
+  <header class="top">
+    <svg class="star-field" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <pattern id="starPat" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M20 4 L24 16 L36 16 L26 23 L30 35 L20 28 L10 35 L14 23 L4 16 L16 16 Z" fill="none" stroke="#E8D9A8" stroke-width="0.7"/>
+        </pattern>
+      </defs>
+      <rect width="400" height="160" fill="url(#starPat)"/>
+    </svg>
+    <div class="brand-row">
+      <svg class="star-mark" viewBox="0 0 40 40" fill="none">
+        <path d="M20 2 L24 15 L38 15 L27 23 L31 37 L20 28 L9 37 L13 23 L2 15 L16 15 Z" stroke="#E8D9A8" stroke-width="1.4" fill="rgba(232,217,168,0.15)"/>
+      </svg>
+      <div class="brand-text">
+        <div class="arabic">دعوة و تبليغ</div>
+        <h1>Dawat-e-Tabligh</h1>
+      </div>
+    </div>
+    <p class="tag" data-i18n="tag"></p>
+    <div class="lang-switch">
+      <button data-lang="ur">اردو</button>
+      <button data-lang="rm" class="active">Roman</button>
+      <button data-lang="en">English</button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HOME ============ -->
+    <section class="page active" id="page-home">
+      <div class="eyebrow" data-i18n="home_eyebrow"></div>
+      <h2 class="page-title" data-i18n="home_title"></h2>
+
+      <div class="card kalima-card gold-frame">
+        <svg class="corner-star tl" viewBox="0 0 20 20"><path d="M10 1 L12 8 L19 8 L13 12 L15 19 L10 14.5 L5 19 L7 12 L1 8 L8 8 Z" fill="#C9A24B"/></svg>
+        <svg class="corner-star tr" viewBox="0 0 20 20"><path d="M10 1 L12 8 L19 8 L13 12 L15 19 L10 14.5 L5 19 L7 12 L1 8 L8 8 Z" fill="#C9A24B"/></svg>
+        <svg class="corner-star bl" viewBox="0 0 20 20"><path d="M10 1 L12 8 L19 8 L13 12 L15 19 L10 14.5 L5 19 L7 12 L1 8 L8 8 Z" fill="#C9A24B"/></svg>
+        <svg class="corner-star br" viewBox="0 0 20 20"><path d="M10 1 L12 8 L19 8 L13 12 L15 19 L10 14.5 L5 19 L7 12 L1 8 L8 8 Z" fill="#C9A24B"/></svg>
+        <div class="ar">لَا إِلَهَ إِلَّا اللَّهُ مُحَمَّدٌ رَسُولُ اللَّهِ</div>
+        <div class="translit" data-i18n="kalima_translit"></div>
+      </div>
+
+      <p data-i18n="home_p1"></p>
+      <p data-i18n="home_p2"></p>
+
+      <div class="divider-star">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1 L14.5 9 L23 9 L16 14 L18.5 22 L12 17 L5.5 22 L8 14 L1 9 L9.5 9 Z"/></svg>
+      </div>
+
+      <h3 class="block-title" data-i18n="home_maqsad_title"></h3>
+      <div class="card">
+        <ul class="adab-list">
+          <li><span class="adab-num">1</span><span data-i18n="home_maqsad_1"></span></li>
+          <li><span class="adab-num">2</span><span data-i18n="home_maqsad_2"></span></li>
+          <li><span class="adab-num">3</span><span data-i18n="home_maqsad_3"></span></li>
+          <li><span class="adab-num">4</span><span data-i18n="home_maqsad_4"></span></li>
+        </ul>
+      </div>
+
+      <h3 class="block-title" data-i18n="home_quick_title"></h3>
+      <div class="quick-grid">
+        <div class="quick-tile" data-nav="history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span data-i18n="quick_history"></span>
+        </div>
+        <div class="quick-tile" data-nav="sifat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"/></svg>
+          <span data-i18n="quick_sifat"></span>
+        </div>
+        <div class="quick-tile" data-nav="gasht">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V9l8-6 8 6v12"/><path d="M9 21v-6h6v6"/></svg>
+          <span data-i18n="quick_gasht"></span>
+        </div>
+        <div class="quick-tile" data-nav="usool">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          <span data-i18n="quick_usool"></span>
+        </div>
+      </div>
+
+      <div class="note-box" data-i18n="home_note"></div>
+    </section>
+
+    <!-- ============ HISTORY ============ -->
+    <section class="page" id="page-history">
+      <div class="eyebrow" data-i18n="history_eyebrow"></div>
+      <h2 class="page-title" data-i18n="history_title"></h2>
+
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="history_founder_title"></h3>
+        <p data-i18n="history_founder_p"></p>
+      </div>
+
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="history_mewat_title"></h3>
+        <p data-i18n="history_mewat_p1"></p>
+        <p data-i18n="history_mewat_p2"></p>
+      </div>
+
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="history_timeline_title"></h3>
+        <div class="timeline">
+          <div class="t-item"><div class="yr">1885</div><p data-i18n="tl_1885"></p></div>
+          <div class="t-item"><div class="yr">1926</div><p data-i18n="tl_1926"></p></div>
+          <div class="t-item"><div class="yr">1944</div><p data-i18n="tl_1944"></p></div>
+          <div class="t-item"><div class="yr">1965–1995</div><p data-i18n="tl_1965_1995"></p></div>
+          <div class="t-item"><div class="yr">1995–2014</div><p data-i18n="tl_1995_2014"></p></div>
+          <div class="t-item"><div class="yr" data-i18n="tl_today_label"></div><p data-i18n="tl_today"></p></div>
+        </div>
+      </div>
+
+      <div class="note-box"><b data-i18n="history_honesty_b"></b> <span data-i18n="history_honesty_p"></span></div>
+
+      <h3 class="block-title" data-i18n="history_raay_title"></h3>
+      <div class="card">
+        <p data-i18n="history_raay_p"></p>
+      </div>
+    </section>
+
+    <!-- ============ SIX SIFAAT ============ -->
+    <section class="page" id="page-sifat">
+      <div class="eyebrow" data-i18n="sifat_eyebrow"></div>
+      <h2 class="page-title" data-i18n="sifat_title"></h2>
+      <p class="muted" style="margin-bottom:14px;" data-i18n="sifat_intro"></p>
+
+      <div class="sifat-card" data-sifat>
+        <div class="sifat-head">
+          <div class="sifat-num">1</div>
+          <h4 data-i18n="sifat1_name"></h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="sifat-body"><div class="sifat-body-inner">
+          <h5 data-i18n="label_taaruf"></h5>
+          <p data-i18n="sifat1_taaruf"></p>
+          <h5 data-i18n="label_hikmat"></h5>
+          <p data-i18n="sifat1_hikmat"></p>
+        </div></div>
+      </div>
+
+      <div class="sifat-card" data-sifat>
+        <div class="sifat-head">
+          <div class="sifat-num">2</div>
+          <h4 data-i18n="sifat2_name"></h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="sifat-body"><div class="sifat-body-inner">
+          <h5 data-i18n="label_taaruf"></h5>
+          <p data-i18n="sifat2_taaruf"></p>
+          <h5 data-i18n="label_hikmat"></h5>
+          <p data-i18n="sifat2_hikmat"></p>
+        </div></div>
+      </div>
+
+      <div class="sifat-card" data-sifat>
+        <div class="sifat-head">
+          <div class="sifat-num">3</div>
+          <h4 data-i18n="sifat3_name"></h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="sifat-body"><div class="sifat-body-inner">
+          <h5 data-i18n="label_taaruf"></h5>
+          <p data-i18n="sifat3_taaruf"></p>
+          <h5 data-i18n="label_hikmat"></h5>
+          <p data-i18n="sifat3_hikmat"></p>
+        </div></div>
+      </div>
+
+      <div class="sifat-card" data-sifat>
+        <div class="sifat-head">
+          <div class="sifat-num">4</div>
+          <h4 data-i18n="sifat4_name"></h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="sifat-body"><div class="sifat-body-inner">
+          <h5 data-i18n="label_taaruf"></h5>
+          <p data-i18n="sifat4_taaruf"></p>
+          <h5 data-i18n="label_hikmat"></h5>
+          <p data-i18n="sifat4_hikmat"></p>
+        </div></div>
+      </div>
+
+      <div class="sifat-card" data-sifat>
+        <div class="sifat-head">
+          <div class="sifat-num">5</div>
+          <h4 data-i18n="sifat5_name"></h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="sifat-body"><div class="sifat-body-inner">
+          <h5 data-i18n="label_taaruf"></h5>
+          <p data-i18n="sifat5_taaruf"></p>
+          <h5 data-i18n="label_hikmat"></h5>
+          <p data-i18n="sifat5_hikmat"></p>
+        </div></div>
+      </div>
+
+      <div class="sifat-card" data-sifat>
+        <div class="sifat-head">
+          <div class="sifat-num">6</div>
+          <h4 data-i18n="sifat6_name"></h4>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="sifat-body"><div class="sifat-body-inner">
+          <h5 data-i18n="label_taaruf"></h5>
+          <p data-i18n="sifat6_taaruf"></p>
+          <h5 data-i18n="label_hikmat"></h5>
+          <p data-i18n="sifat6_hikmat"></p>
+          <div class="note-box" data-i18n="sifat6_doubt"></div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ============ GASHT ADAAB ============ -->
+    <section class="page" id="page-gasht">
+      <div class="eyebrow" data-i18n="gasht_eyebrow"></div>
+      <h2 class="page-title" data-i18n="gasht_title"></h2>
+      <p style="margin-bottom:14px;" data-i18n="gasht_intro"></p>
+
+      <div class="card">
+        <ul class="adab-list" id="gashtList"></ul>
+      </div>
+
+      <div class="note-box" data-i18n="gasht_note"></div>
+    </section>
+
+    <!-- ============ USOOL O ZAWABIT ============ -->
+    <section class="page" id="page-usool">
+      <div class="eyebrow" data-i18n="usool_eyebrow"></div>
+      <h2 class="page-title" data-i18n="usool_title"></h2>
+
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="usool1_title"></h3>
+        <p data-i18n="usool1_p"></p>
+      </div>
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="usool2_title"></h3>
+        <p data-i18n="usool2_p"></p>
+      </div>
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="usool3_title"></h3>
+        <p data-i18n="usool3_p"></p>
+      </div>
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="usool4_title"></h3>
+        <p data-i18n="usool4_p"></p>
+      </div>
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="usool5_title"></h3>
+        <p data-i18n="usool5_p"></p>
+      </div>
+      <div class="card">
+        <h3 class="block-title" style="margin-top:0;" data-i18n="usool6_title"></h3>
+        <p data-i18n="usool6_p"></p>
+      </div>
+    </section>
+
+    <!-- ============ SHUBUHAT / FAQ ============ -->
+    <section class="page" id="page-faq">
+      <div class="eyebrow" data-i18n="faq_eyebrow"></div>
+      <h2 class="page-title" data-i18n="faq_title"></h2>
+      <p style="margin-bottom:10px;" data-i18n="faq_intro"></p>
+
+      <div class="card" style="padding:4px 14px;" id="faqList"></div>
+    </section>
+
+  </main>
+
+  <nav class="bottom">
+    <button class="active" data-nav="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      <span data-i18n="nav_home"></span>
+    </button>
+    <button data-nav="history">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <span data-i18n="nav_history"></span>
+    </button>
+    <button data-nav="sifat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"/></svg>
+      <span data-i18n="nav_sifat"></span>
+    </button>
+    <button data-nav="gasht">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V9l8-6 8 6v12"/><path d="M9 21v-6h6v6"/></svg>
+      <span data-i18n="nav_gasht"></span>
+    </button>
+    <button data-nav="usool">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      <span data-i18n="nav_usool"></span>
+    </button>
+    <button data-nav="faq">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.5-2 1.8-2 3.3M12 17h.01"/></svg>
+      <span data-i18n="nav_faq"></span>
+    </button>
+  </nav>
+
+</div>
+
+<script>
+const I18N = {
+  tag:{ rm:"Iman, Amal aur Dawat — Ummat ki bunyadi islah ke liye ek sadgi bhari raah",
+        en:"Faith, practice and outreach — a humble path toward the Ummah's basic reform",
+        ur:"ایمان، عمل اور دعوت — امت کی بنیادی اصلاح کے لیے ایک سادگی بھری راہ" },
+
+  nav_home:{rm:"Ghar", en:"Home", ur:"گھر"},
+  nav_history:{rm:"Tareekh", en:"History", ur:"تاریخ"},
+  nav_sifat:{rm:"6 Sifaat", en:"Six Points", ur:"چھ صفات"},
+  nav_gasht:{rm:"Gasht", en:"Rounds", ur:"گشت"},
+  nav_usool:{rm:"Usool", en:"Rules", ur:"اصول"},
+  nav_faq:{rm:"Shubuhat", en:"Doubts", ur:"شبہات"},
+
+  home_eyebrow:{rm:"Khush Aamdeed", en:"Welcome", ur:"خوش آمدید"},
+  home_title:{rm:"Is Kaam Ka Ta'aruf", en:"About This Work", ur:"اس کام کا تعارف"},
+  kalima_translit:{rm:"La ilaha illallah, Muhammadur Rasulullah", en:"There is no god but Allah, Muhammad is the Messenger of Allah",
+    ur:"اللہ کے سوا کوئی معبود نہیں، محمد اللہ کے رسول ہیں"},
+  home_p1:{
+    rm:"Dawat-e-Tabligh — jise aam taur par Tablighi Jamaat kaha jata hai — Ummat-e-Muslima mein bunyadi Iman aur amal ki bahali ke liye chalayi ja rahi ek khamosh, ghair-siyasi aur ikhtiyari koshish hai. Iski buniyad Hazrat Maulana Muhammad Ilyas Kandhlawi (rah) ne 1926 mein Mewat, Dehli ke qareeb, rakhi thi.",
+    en:"Dawat-e-Tabligh — commonly known as the Tablighi Jamaat — is a quiet, non-political, voluntary effort to restore basic faith and practice within the Muslim community. It was founded by Maulana Muhammad Ilyas Kandhlawi (rah) in 1926 in Mewat, near Delhi.",
+    ur:"دعوت و تبلیغ — جسے عام طور پر تبلیغی جماعت کہا جاتا ہے — امتِ مسلمہ میں بنیادی ایمان اور عمل کی بحالی کے لیے چلائی جانے والی ایک خاموش، غیر سیاسی اور اختیاری کوشش ہے۔ اس کی بنیاد حضرت مولانا محمد الیاس کاندھلوی رحمہ اللہ نے 1926 میں میوات، دہلی کے قریب، رکھی تھی۔"},
+  home_p2:{
+    rm:"Is kaam ka tareeqa seedha aur sada hai: apna waqt, maal aur zindagi Allah ke raste mein nikal kar, ghar-ghar, masjid-masjid jaakar Musalmanon ko unki bhoolii hui zimmedari — Kalima, Namaz aur Deen ki bunyadi baatein — yaad dilana.",
+    en:"The method is simple and direct: to give one's time, wealth and life in the way of Allah, going house to house and mosque to mosque, reminding Muslims of their forgotten responsibility — the Kalima, Salah, and the basics of faith.",
+    ur:"اس کام کا طریقہ سیدھا اور سادہ ہے: اپنا وقت، مال اور زندگی اللہ کے راستے میں نکال کر، گھر گھر، مسجد مسجد جا کر مسلمانوں کو ان کی بھولی ہوئی ذمہ داری — کلمہ، نماز اور دین کی بنیادی باتیں — یاد دلانا۔"},
+  home_maqsad_title:{rm:"Is Kaam Ka Maqsad", en:"The Purpose of This Work", ur:"اس کام کا مقصد"},
+  home_maqsad_1:{rm:"Har Musalman mard-o-zan ke andar bunyadi Iman aur Amal ki wapsi — khaas kar unmein jo naam ke Musalman reh gaye hain.",
+    en:"To restore basic faith and practice in every Muslim man and woman — especially those who remain Muslim in name only.",
+    ur:"ہر مسلمان مرد و زن کے اندر بنیادی ایمان اور عمل کی واپسی — خاص کر ان میں جو نام کے مسلمان رہ گئے ہیں۔"},
+  home_maqsad_2:{rm:"Har Musalman ko yeh ehsaas dilana ke Deen ki dawat sirf Ulama ka nahi, har momin ka kaam hai.",
+    en:"To make every Muslim realise that inviting others to the faith is not only the scholars' duty, but every believer's.",
+    ur:"ہر مسلمان کو یہ احساس دلانا کہ دین کی دعوت صرف علما کا نہیں، ہر مومن کا کام ہے۔"},
+  home_maqsad_3:{rm:"Sahaba (RA) ke us tareeqe ko zinda karna jisme woh Deen ke liye apna waqt aur ghar-bar chhod kar nikalte thay.",
+    en:"To revive the way of the Companions (RA), who would leave their homes and give their time for the sake of the faith.",
+    ur:"صحابہ رضی اللہ عنہم کے اس طریقے کو زندہ کرنا جس میں وہ دین کے لیے اپنا وقت اور گھر بار چھوڑ کر نکلتے تھے۔"},
+  home_maqsad_4:{rm:"Musalmanon ko mazhabi guroh-bandi aur ikhtilaf se bala tar hokar ek Kalime par jama karna.",
+    en:"To bring Muslims together on one Kalima, rising above sectarian grouping and dispute.",
+    ur:"مسلمانوں کو مذہبی گروہ بندی اور اختلاف سے بالاتر ہو کر ایک کلمے پر جمع کرنا۔"},
+  home_quick_title:{rm:"Jaldi Se Dekhein", en:"Quick Links", ur:"جلدی دیکھیں"},
+  quick_history:{rm:"Tareekh & Bunyad", en:"History & Origins", ur:"تاریخ و بنیاد"},
+  quick_sifat:{rm:"6 Sifaat & Hikmat", en:"Six Points & Wisdom", ur:"چھ صفات و حکمت"},
+  quick_gasht:{rm:"Gasht ke Adaab", en:"Etiquette of Rounds", ur:"گشت کے آداب"},
+  quick_usool:{rm:"Usool o Zawabit", en:"Rules & Regulations", ur:"اصول و ضوابط"},
+  home_note:{rm:"<b>Guzarish:</b> Yeh app Dawat-e-Tabligh ki taleemat ko unke apne maroof hawalon — tareekhi kutub, Chhe Baaton aur Fazail-o-Adab ki tehreeron — ki roshni mein sada tareeqe se pesh karti hai, taake naye sath jaanne walon ko sahih maloomat mil sake, na ke sunni-sunayi baatein.",
+    en:"<b>A note:</b> This app presents the teachings of Dawat-e-Tabligh in a simple way, based on its own well-known references — historical accounts, the Six Points, and writings on the etiquette and virtues of the work — so that newcomers get accurate information rather than hearsay.",
+    ur:"<b>گزارش:</b> یہ ایپ دعوتِ تبلیغ کی تعلیمات کو ان کے اپنے معروف حوالوں — تاریخی کتب، چھ باتوں اور فضائل و آداب کی تحریروں — کی روشنی میں سادہ طریقے سے پیش کرتی ہے، تاکہ نئے جاننے والوں کو صحیح معلومات مل سکیں، نہ کہ سنی سنائی باتیں۔"},
+
+  history_eyebrow:{rm:"Tareekh", en:"History", ur:"تاریخ"},
+  history_title:{rm:"Bunyad Aur Pas-e-Manzar", en:"Origins & Background", ur:"بنیاد اور پس منظر"},
+  history_founder_title:{rm:"Baani: Maulana Muhammad Ilyas Kandhlawi (rah)", en:"Founder: Maulana Muhammad Ilyas Kandhlawi (rah)", ur:"بانی: مولانا محمد الیاس کاندھلوی رحمہ اللہ"},
+  history_founder_p:{
+    rm:"Paida-ish 1885 mein Kandhla, Muzaffarnagar mein. Aap ka ta'alluq ek ilmi aur mutaqi khandan se tha — aap ke walid Maulana Muhammad Ismail, Dehli ke Nizamuddin ilake ki Banglewali Masjid mein ek chhota madrasa chalate thay. Maulana Ilyas ne Darul Uloom Deoband aur Mazahir-ul-Uloom Saharanpur mein taleem paayi, aur apne daur ke bade Ulama — Sheikh-ul-Hind Maulana Mahmood Hasan, Maulana Rasheed Ahmad Gangohi aur Maulana Khalil Ahmad Saharanpuri — se ijazat o rehnumai haasil ki.",
+    en:"Born in 1885 in Kandhla, Muzaffarnagar, he came from a learned and devout family — his father, Maulana Muhammad Ismail, ran a small madrasa at Banglewali Masjid in Delhi's Nizamuddin area. Maulana Ilyas studied at Darul Uloom Deoband and Mazahir-ul-Uloom Saharanpur, and received guidance and authorisation from leading scholars of his time — Sheikh-ul-Hind Maulana Mahmood Hasan, Maulana Rasheed Ahmad Gangohi and Maulana Khalil Ahmad Saharanpuri.",
+    ur:"پیدائش 1885 میں کاندھلہ، مظفر نگر میں ہوئی۔ آپ کا تعلق ایک علمی اور متقی خاندان سے تھا — آپ کے والد مولانا محمد اسماعیل، دہلی کے نظام الدین علاقے کی بنگلے والی مسجد میں ایک چھوٹا مدرسہ چلاتے تھے۔ مولانا الیاس نے دارالعلوم دیوبند اور مظاہرالعلوم سہارنپور میں تعلیم پائی، اور اپنے دور کے بڑے علما — شیخ الہند مولانا محمود حسن، مولانا رشید احمد گنگوہی اور مولانا خلیل احمد سہارنپوری — سے اجازت و رہنمائی حاصل کی۔"},
+  history_mewat_title:{rm:"Mewat Ka Tajurba — Kaam Ki Wajah", en:"The Mewat Experience — Why It Began", ur:"میوات کا تجربہ — کام کی وجہ"},
+  history_mewat_p1:{
+    rm:"Nizamuddin ke usi madrase mein taleem dete hue, Maulana Ilyas ka wasta Mewat (aaj ke Haryana/Rajasthan sarhad) ke ilake se pada, jahan ke Musalman naslon se Islam se munsalik hone ke bawajood bunyadi Kalima, Namaz aur deeni tor-tareeqon se bohot door ho chuke thay. Aap ne dekha ke madrase se taleem paakar wapas jaane wale bacche bhi wapas usi mahol mein jaakar phir se pehli halat mein aa jate — sirf madrasa kaafi nahi tha.",
+    en:"While teaching at that same Nizamuddin madrasa, Maulana Ilyas came into contact with the Mewat region (near today's Haryana–Rajasthan border), where Muslims, despite generations of belonging to Islam, had drifted far from the basic Kalima, Salah and religious practice. He saw that children who studied at the madrasa and returned home would slip back into the same old ways — the madrasa alone was not enough.",
+    ur:"نظام الدین کے اسی مدرسے میں تعلیم دیتے ہوئے، مولانا الیاس کا واسطہ میوات (آج کے ہریانہ راجستھان سرحد) کے علاقے سے پڑا، جہاں کے مسلمان نسلوں سے اسلام سے منسلک ہونے کے باوجود بنیادی کلمہ، نماز اور دینی طور طریقوں سے بہت دور ہو چکے تھے۔ آپ نے دیکھا کہ مدرسے سے تعلیم پا کر واپس جانے والے بچے بھی واپس اسی ماحول میں جا کر پھر سے پہلی حالت میں آ جاتے — صرف مدرسہ کافی نہیں تھا۔"},
+  history_mewat_p2:{
+    rm:"Isi soch ne unhein is nateeje tak pahunchaya ke Deen sirf kitabi taleem se nahi, balke khud apne waqt aur mehnat se, ghar-ghar jaakar, \"Musalman ko Musalman banane\" ki koshish se zinda hoga — jaisa Sahaba (RA) ka tareeqa raha.",
+    en:"This reflection led him to conclude that faith would not be revived through book-learning alone, but through personal time and effort, going house to house, in an attempt to \"make a Muslim into a Muslim\" — the way of the Companions (RA).",
+    ur:"اسی سوچ نے انہیں اس نتیجے تک پہنچایا کہ دین صرف کتابی تعلیم سے نہیں، بلکہ خود اپنے وقت اور محنت سے، گھر گھر جا کر، \"مسلمان کو مسلمان بنانے\" کی کوشش سے زندہ ہوگا — جیسا صحابہ رضی اللہ عنہم کا طریقہ رہا۔"},
+  history_timeline_title:{rm:"Tareekhi Silsila", en:"Historical Timeline", ur:"تاریخی سلسلہ"},
+  tl_1885:{rm:"Maulana Muhammad Ilyas Kandhlawi ki paida-ish, Kandhla mein.", en:"Birth of Maulana Muhammad Ilyas Kandhlawi, in Kandhla.", ur:"مولانا محمد الیاس کاندھلوی کی پیدائش، کاندھلہ میں۔"},
+  tl_1926:{rm:"Doosre Hajj se wapsi ke baad, Mewat mein baqaida tor par is kaam ki ibtida — chhote jamaaton ki soorat mein logon ko masajid ki taraf bulane ka silsila shuru hua.",
+    en:"After returning from his second Hajj, the work formally began in Mewat — small groups started calling people towards the mosques.",
+    ur:"دوسرے حج سے واپسی کے بعد، میوات میں باقاعدہ طور پر اس کام کی ابتدا — چھوٹی جماعتوں کی صورت میں لوگوں کو مساجد کی طرف بلانے کا سلسلہ شروع ہوا۔"},
+  tl_1944:{rm:"Maulana Ilyas (rah) ki wafat; Maulana Muhammad Yusuf Kandhlawi (unke sahibzade) doosre Ameer muqarrar hue, jinhone kaam ko Hindustan se bahar duniya bhar tak phailaya.",
+    en:"Maulana Ilyas (rah) passed away; his son Maulana Muhammad Yusuf Kandhlawi became the second Ameer and spread the work beyond India, across the world.",
+    ur:"مولانا الیاس رحمہ اللہ کی وفات؛ ان کے صاحبزادے مولانا محمد یوسف کاندھلوی دوسرے امیر مقرر ہوئے، جنہوں نے کام کو ہندوستان سے باہر دنیا بھر تک پھیلایا۔"},
+  tl_1965_1995:{rm:"Maulana Inaam-ul-Hasan Kandhlawi ki qiyadat mein kaam Africa, Europe aur America tak pahuncha; Raiwind (Pakistan) aur Kakrail (Bangladesh) bade markaz bane.",
+    en:"Under Maulana Inaam-ul-Hasan Kandhlawi's leadership, the work reached Africa, Europe and America; Raiwind (Pakistan) and Kakrail (Bangladesh) became major centres.",
+    ur:"مولانا انعام الحسن کاندھلوی کی قیادت میں کام افریقہ، یورپ اور امریکہ تک پہنچا؛ رائے ونڈ (پاکستان) اور ککریل (بنگلہ دیش) بڑے مراکز بنے۔"},
+  tl_1995_2014:{rm:"Maulana Zubair-ul-Hasan Kandhlawi Ameer rahe.", en:"Maulana Zubair-ul-Hasan Kandhlawi served as Ameer.", ur:"مولانا زبیر الحسن کاندھلوی امیر رہے۔"},
+  tl_today_label:{rm:"Aaj", en:"Today", ur:"آج"},
+  tl_today:{rm:"Markaz Banglewali Masjid, Nizamuddin (Dehli) duniya bhar ke is kaam ka markazi hawala samjha jata hai; kaam 150 se zyada mulkon mein pahunch chuka hai. Bishwa Ijtema (Bangladesh) duniya ke sab se bade deeni ijtimaaton mein shumar hota hai.",
+    en:"Banglewali Masjid, Nizamuddin (Delhi) remains the central reference point for the work worldwide; it has reached over 150 countries. The Bishwa Ijtema (Bangladesh) ranks among the largest religious gatherings in the world.",
+    ur:"مرکز بنگلے والی مسجد، نظام الدین (دہلی) دنیا بھر کے اس کام کا مرکزی حوالہ سمجھا جاتا ہے؛ کام 150 سے زیادہ ممالک میں پہنچ چکا ہے۔ بشوا اجتماع (بنگلہ دیش) دنیا کے سب سے بڑے دینی اجتماعات میں شمار ہوتا ہے۔"},
+  history_honesty_b:{rm:"Diyanatdari ki baat:", en:"In fairness:", ur:"دیانتداری کی بات:"},
+  history_honesty_p:{rm:"2015 ke aas-paas Nizamuddin Markaz aur Alami Shura (Raiwind se munsalik) ke darmiyan qiyadat ko lekar ikhtilaf paida hua, jo abhi bhi kayi jagah jaari hai. Yeh app kisi ek fareeq ki tarafdari nahi karti — sirf maroof tareekhi tafseelat pesh kar rahi hai.",
+    en:"Around 2015, a leadership dispute arose between the Nizamuddin Markaz and the Alami Shura (linked to Raiwind), which still continues in various places. This app does not take either side — it presents only well-known historical details.",
+    ur:"2015 کے آس پاس نظام الدین مرکز اور عالمی شوریٰ (رائے ونڈ سے منسلک) کے درمیان قیادت کو لے کر اختلاف پیدا ہوا، جو ابھی بھی کئی جگہ جاری ہے۔ یہ ایپ کسی ایک فریق کی طرفداری نہیں کرتی — صرف معروف تاریخی تفصیلات پیش کر رہی ہے۔"},
+  history_raay_title:{rm:"Kis Ki Raay Se Shuru Hua?", en:"On Whose Advice Did It Begin?", ur:"کس کی رائے سے شروع ہوا؟"},
+  history_raay_p:{rm:"Maulana Ilyas (rah) ne yeh kaam achanak ya akele shuru nahi kiya. Riwayat ke mutabiq unhone apne bade Ustazon aur us daur ke maroof Ulama se mashwara aur ijazat li, aur baar-baar dua aur ghor-o-fikr ke baad hi is kaam ki ibtida ki. Unka maqsad koi naya firqa banana nahi tha, balke maujooda Ummat ke andar Iman ki wapas aabadkari thi — is liye unhone shuru se hi is kaam ko \"tehreek\" ya \"jamaat\" ka naam dene se guraiz kiya aur ise sirf ek \"mehnat\" (koshish) kaha.",
+    en:"Maulana Ilyas (rah) did not begin this work suddenly or alone. According to traditional accounts, he consulted and sought permission from his senior teachers and the well-known scholars of his time, and began the work only after repeated prayer and reflection. His aim was not to create a new sect, but to restore faith within the existing Ummah — which is why, from the start, he avoided calling it a \"movement\" or \"organisation\" and referred to it simply as a \"mehnat\" (effort).",
+    ur:"مولانا الیاس رحمہ اللہ نے یہ کام اچانک یا اکیلے شروع نہیں کیا۔ روایت کے مطابق انہوں نے اپنے بڑے استادوں اور اس دور کے معروف علما سے مشورہ اور اجازت لی، اور بار بار دعا اور غور و فکر کے بعد ہی اس کام کی ابتدا کی۔ ان کا مقصد کوئی نیا فرقہ بنانا نہیں تھا، بلکہ موجودہ امت کے اندر ایمان کی واپس آبادکاری تھی — اسی لیے انہوں نے شروع سے ہی اس کام کو \"تحریک\" یا \"جماعت\" کا نام دینے سے گریز کیا اور اسے صرف ایک \"محنت\" (کوشش) کہا۔"},
+
+  sifat_eyebrow:{rm:"Buniyaadi Taleem", en:"Core Teaching", ur:"بنیادی تعلیم"},
+  sifat_title:{rm:"Chhe Sifaat (6 Points)", en:"The Six Points", ur:"چھے صفات"},
+  sifat_intro:{rm:"Yeh chhe sifaat khud koi mustaqil hadees ki ibarat nahi hain — balke Sahaba (RA) ki zindagi mein paayi jaane wali un sifaat ka khulasa hain jo Quran-o-Hadees ki mukhtalif taleemat se maloom hoti hain. Maulana Ilyas aur baad mein Maulana Yusuf (rah) ne inhein aasan tarteeb mein murattab kiya taake har aam Musalman inhein yaad rakh kar apni zindagi mein utaar sake.",
+    en:"These six points are not, in themselves, a fixed piece of hadith text — rather, they are a summary of qualities found in the lives of the Companions (RA), drawn from various teachings of the Quran and Hadith. Maulana Ilyas, and later Maulana Yusuf (rah), arranged them in this simple order so ordinary Muslims could remember and apply them in daily life.",
+    ur:"یہ چھے صفات خود کوئی مستقل حدیث کی عبارت نہیں ہیں — بلکہ صحابہ رضی اللہ عنہم کی زندگی میں پائی جانے والی ان صفات کا خلاصہ ہیں جو قرآن و حدیث کی مختلف تعلیمات سے معلوم ہوتی ہیں۔ مولانا الیاس اور بعد میں مولانا یوسف رحمہما اللہ نے انہیں آسان ترتیب میں مرتب کیا تاکہ ہر عام مسلمان انہیں یاد رکھ کر اپنی زندگی میں اتار سکے۔"},
+
+  label_taaruf:{rm:"Ta'aruf", en:"Meaning", ur:"تعارف"},
+  label_hikmat:{rm:"Hikmat", en:"Wisdom", ur:"حکمت"},
+
+  sifat1_name:{rm:"Kalima (Iman)", en:"Kalima (Faith)", ur:"کلمہ (ایمان)"},
+  sifat1_taaruf:{rm:"La ilaha illallah Muhammadur Rasulullah — is yaqeen ka dil mein pukhta hona ke izzat, madad aur kamiyaabi sirf Allah ki taraf se hai, aur zindagi guzarne ka mukammal tareeqa sirf Rasoolullah ﷺ ka laaya hua tareeqa hai.",
+    en:"There is no god but Allah, Muhammad is His Messenger — a firm conviction that honour, help and success come from Allah alone, and that the complete way of life is the one brought by the Messenger ﷺ.",
+    ur:"لا الہ الا اللہ محمد رسول اللہ — اس یقین کا دل میں پختہ ہونا کہ عزت، مدد اور کامیابی صرف اللہ کی طرف سے ہے، اور زندگی گزارنے کا مکمل طریقہ صرف رسول اللہ ﷺ کا لایا ہوا طریقہ ہے۔"},
+  sifat1_hikmat:{rm:"Jab tak yeh yaqeen zabaan se aage badh kar dil mein na utre, koi bhi amal apni asal rooh nahi paata. Isi liye ise sab se pehle rakha gaya — baaqi tamam sifaat isi Iman ki shaakhein hain.",
+    en:"Until this conviction moves beyond the tongue and settles in the heart, no action carries its true spirit. This is why it is placed first — every other point is a branch of this same faith.",
+    ur:"جب تک یہ یقین زبان سے آگے بڑھ کر دل میں نہ اترے، کوئی بھی عمل اپنی اصل روح نہیں پاتا۔ اسی لیے اسے سب سے پہلے رکھا گیا — باقی تمام صفات اسی ایمان کی شاخیں ہیں۔"},
+
+  sifat2_name:{rm:"Namaz Ba-Khushu-o-Khuzu", en:"Prayer with Concentration", ur:"نماز باخشوع و خضوع"},
+  sifat2_taaruf:{rm:"Namaz sirf zahiri arkaan poori karna nahi, balke dil ki hazri aur tawajjo ke saath, uske huqooq aur sunnaton ka lihaz rakhte hue ada karna.",
+    en:"Prayer is not merely completing the outward movements, but performing it with presence of heart and attention, observing its rights and its Sunnah.",
+    ur:"نماز صرف ظاہری ارکان پوری کرنا نہیں، بلکہ دل کی حاضری اور توجہ کے ساتھ، اس کے حقوق اور سنتوں کا لحاظ رکھتے ہوئے ادا کرنا۔"},
+  sifat2_hikmat:{rm:"Namaz momin aur Allah ke darmiyan roz ka mulaqaat hai. Jab yeh mulaqaat sirf aadat ban jaye to dil se asar khatam ho jata hai — isi liye is sifat mein \"khushu-o-khuzu\" (tawajjo aur inkisari) par zor diya jata hai, na ke sirf namaz ada karne par.",
+    en:"Prayer is the believer's daily meeting with Allah. When this meeting becomes mere habit, its inner effect fades — which is why this point stresses concentration and humility, not just the outward performance of prayer.",
+    ur:"نماز مومن اور اللہ کے درمیان روز کی ملاقات ہے۔ جب یہ ملاقات صرف عادت بن جائے تو دل سے اثر ختم ہو جاتا ہے — اسی لیے اس صفت میں \"خشوع و خضوع\" (توجہ اور انکساری) پر زور دیا جاتا ہے، نہ کہ صرف نماز ادا کرنے پر۔"},
+
+  sifat3_name:{rm:"Ilm o Zikr", en:"Knowledge & Remembrance", ur:"علم و ذکر"},
+  sifat3_taaruf:{rm:"Ilm — apne rozmarra amal ke liye zaroori deeni maloomat haasil karna; Zikr — Allah ko har waqt yaad rakhna taake amal sahih niyat aur hazri-e-qalb ke saath ho.",
+    en:"Ilm — acquiring the religious knowledge needed for daily practice; Zikr — remembering Allah at all times so that action is done with sincere intention and presence of heart.",
+    ur:"علم — اپنے روزمرہ عمل کے لیے ضروری دینی معلومات حاصل کرنا؛ ذکر — اللہ کو ہر وقت یاد رکھنا تاکہ عمل صحیح نیت اور حاضریٔ قلب کے ساتھ ہو۔"},
+  sifat3_hikmat:{rm:"Maulana Yusuf (rah) ke mutabiq Ilm aur Zikr ko is liye saath rakha gaya ke sirf Ilm bagair Zikr ke khushk (dry) reh sakta hai, aur sirf Zikr bagair Ilm ke sahih rukh nahi le pata. Dono milkar amal ko roohaniyat aur sehat dono ata karte hain.",
+    en:"According to Maulana Yusuf (rah), knowledge and remembrance are paired because knowledge alone, without remembrance, can turn dry, while remembrance alone, without knowledge, can lose its right direction. Together they give action both spirit and soundness.",
+    ur:"مولانا یوسف رحمہ اللہ کے مطابق علم اور ذکر کو اس لیے ساتھ رکھا گیا کہ صرف علم بغیر ذکر کے خشک رہ سکتا ہے، اور صرف ذکر بغیر علم کے صحیح رخ نہیں لے پاتا۔ دونوں مل کر عمل کو روحانیت اور صحت دونوں عطا کرتے ہیں۔"},
+
+  sifat4_name:{rm:"Ikram-e-Muslim", en:"Honouring Muslims", ur:"اکرامِ مسلم"},
+  sifat4_taaruf:{rm:"Har Musalman ki izzat karna, uska haq ada karna aur apna haq chhod dena, chhote-bade, ameer-ghareeb sab ka lihaz rakhna.",
+    en:"Honouring every Muslim, fulfilling their rights and setting aside one's own, showing consideration to young and old, rich and poor alike.",
+    ur:"ہر مسلمان کی عزت کرنا، اس کا حق ادا کرنا اور اپنا حق چھوڑ دینا، چھوٹے بڑے، امیر غریب سب کا لحاظ رکھنا۔"},
+  sifat4_hikmat:{rm:"Jab tak Ummat ke andar aapas mein ikraam aur narmi na ho, dawat ka asar khud Musalmanon par bhi nahi padta. Yeh sifat Ummat ko andar se jorne aur bhai-chaara paida karne ke liye rakhi gayi.",
+    en:"Until there is mutual honour and gentleness within the Ummah, the call of dawah does not even affect Muslims themselves. This point exists to bind the Ummah together from within and build brotherhood.",
+    ur:"جب تک امت کے اندر آپس میں اکرام اور نرمی نہ ہو، دعوت کا اثر خود مسلمانوں پر بھی نہیں پڑتا۔ یہ صفت امت کو اندر سے جوڑنے اور بھائی چارہ پیدا کرنے کے لیے رکھی گئی۔"},
+
+  sifat5_name:{rm:"Ikhlas-e-Niyyat", en:"Sincerity of Intention", ur:"اخلاصِ نیت"},
+  sifat5_taaruf:{rm:"Har amal sirf Allah ki raza ke liye karna, dikhawe (riya) aur naam-o-namood se bachna.",
+    en:"Doing every act solely for Allah's pleasure, avoiding showing off and seeking reputation.",
+    ur:"ہر عمل صرف اللہ کی رضا کے لیے کرنا، دکھاوے (ریا) اور نام و نمود سے بچنا۔"},
+  sifat5_hikmat:{rm:"Amal ki qadr Allah ke nazdeek uski niyyat se hoti hai, uski miqdaar se nahi. Isi liye har kaam se pehle, darmiyan aur baad mein apni niyyat ka jaiza lene ki taleem di jati hai.",
+    en:"An action's worth before Allah lies in its intention, not its size. This is why one is taught to examine one's intention before, during and after every act.",
+    ur:"عمل کی قدر اللہ کے نزدیک اس کی نیت سے ہوتی ہے، اس کی مقدار سے نہیں۔ اسی لیے ہر کام سے پہلے، درمیان اور بعد میں اپنی نیت کا جائزہ لینے کی تعلیم دی جاتی ہے۔"},
+
+  sifat6_name:{rm:"Dawat-o-Tabligh (Waqt Lagana)", en:"Dawah & Tabligh (Giving Time)", ur:"دعوت و تبلیغ (وقت لگانا)"},
+  sifat6_taaruf:{rm:"Allah ke diye hue waqt, maal aur zindagi ka kuch hissa Deen ki dawat ke liye nikalna — khud bhi seekhna aur dusron tak bhi pahunchana.",
+    en:"Setting aside a portion of the time, wealth and life Allah has given, for the cause of dawah — learning oneself and conveying it to others.",
+    ur:"اللہ کے دیے ہوئے وقت، مال اور زندگی کا کچھ حصہ دین کی دعوت کے لیے نکالنا — خود بھی سیکھنا اور دوسروں تک بھی پہنچانا۔"},
+  sifat6_hikmat:{rm:"Insaan jis cheez mein apna waqt aur mehnat lagata hai, wahi cheez uski asal fikr ban jati hai. Jab koi Deen ki dawat ke liye waqt nikalta hai to yeh amal khud usi ke Iman ko mazboot karta hai — pehle asar dene wale par hota hai, phir sunne wale par.",
+    en:"Whatever a person invests time and effort in becomes their true concern. When someone gives time for the sake of dawah, the act itself strengthens their own faith first, before it affects the listener.",
+    ur:"انسان جس چیز میں اپنا وقت اور محنت لگاتا ہے، وہی چیز اس کی اصل فکر بن جاتی ہے۔ جب کوئی دین کی دعوت کے لیے وقت نکالتا ہے تو یہ عمل خود اسی کے ایمان کو مضبوط کرتا ہے — پہلے اثر دینے والے پر ہوتا ہے، پھر سننے والے پر۔"},
+  sifat6_doubt:{rm:"Doubt: kya yeh Quran-Hadees se sabit hai ke waqt nikal kar dawat ke liye nikalna zaroori hai? — Jawab: Dawat dena Quran ki roshni mein har Momin ki zimmedari hai (\"Ud'u ila sabili Rabbika\" — apne Rab ke raste ki taraf bulao). \"Kitna waqt aur kis tareeqe se\" — yeh tafseel ijtihadi aur tanzeemi soch hai jo waqt ke sath tay ki gayi, khud koi nass nahi.",
+    en:"Doubt: Is it proven from the Quran and Hadith that setting aside fixed time for dawah is obligatory? — Answer: Calling others to the faith is, in light of the Quran, every believer's responsibility (\"Invite to the way of your Lord\"). But the specific amount of time and method is a matter of scholarly reasoning and organisational planning developed over time — not a direct Quranic or Hadith text in itself.",
+    ur:"شبہ: کیا یہ قرآن و حدیث سے ثابت ہے کہ وقت نکال کر دعوت کے لیے نکلنا ضروری ہے؟ — جواب: دعوت دینا قرآن کی روشنی میں ہر مومن کی ذمہ داری ہے (\"ادعُ الیٰ سبیل ربک\" — اپنے رب کے راستے کی طرف بلاؤ)۔ \"کتنا وقت اور کس طریقے سے\" — یہ تفصیل اجتہادی اور تنظیمی سوچ ہے جو وقت کے ساتھ طے کی گئی، خود کوئی نص نہیں۔"},
+
+  gasht_eyebrow:{rm:"Amal Ka Tareeqa", en:"Method of Practice", ur:"عمل کا طریقہ"},
+  gasht_title:{rm:"Gasht Ke Adaab", en:"Etiquette of the Rounds", ur:"گشت کے آداب"},
+  gasht_intro:{rm:"Gasht (ya Joula) — masjid ke aas-paas ke logon ko namaz aur deen ki taraf narmi se bulane ka amal. Neeche wo bunyadi adaab hain jo aam taur par sikhaaye jate hain; ye mahal aur mashware ke mutabiq kam-zyada ho sakte hain.",
+    en:"Gasht (or Joula) is the practice of gently inviting people around a mosque towards prayer and the faith. Below are the basic points of etiquette generally taught; these may vary by local custom and consultation.",
+    ur:"گشت (یا جولہ) — مسجد کے آس پاس کے لوگوں کو نماز اور دین کی طرف نرمی سے بلانے کا عمل۔ نیچے وہ بنیادی آداب ہیں جو عام طور پر سکھائے جاتے ہیں؛ یہ مقام اور مشورے کے مطابق کم زیادہ ہو سکتے ہیں۔"},
+  gasht_note:{rm:"<b>Yaad rahe:</b> Gasht ka maqsad kisi ko \"shikast\" dena ya bahas mein jeetna nahi — sirf mohabbat se yaad dilana hai. Jo baatein in adaab mein shamil nahi (jaise kisi khaas jumle ka rasm ban jaana, ya kisi khaas tarz-e-guftagu ko zaroori samajhna) unhein mahaz \"mahal ka riwaj\" samjha jaana chahiye, deen ka hukm nahi.",
+    en:"<b>Remember:</b> The purpose of gasht is not to \"defeat\" anyone or win an argument — only to remind with love. Anything not included in these points (such as a particular phrase becoming a fixed ritual, or a specific manner of speaking being treated as compulsory) should be understood as local custom, not a command of the faith.",
+    ur:"<b>یاد رہے:</b> گشت کا مقصد کسی کو \"شکست\" دینا یا بحث میں جیتنا نہیں — صرف محبت سے یاد دلانا ہے۔ جو باتیں ان آداب میں شامل نہیں (جیسے کسی خاص جملے کا رسم بن جانا، یا کسی خاص طرزِ گفتگو کو ضروری سمجھنا) انہیں محض \"مقام کا رواج\" سمجھا جانا چاہیے، دین کا حکم نہیں۔"},
+
+  usool_eyebrow:{rm:"Nazm-o-Nasq", en:"Structure", ur:"نظم و نسق"},
+  usool_title:{rm:"Usool o Zawabit", en:"Rules & Regulations", ur:"اصول و ضوابط"},
+  usool1_title:{rm:"Waqt Ki Miqdaarein", en:"Amounts of Time", ur:"وقت کی مقداریں"},
+  usool1_p:{rm:"Kaam mein shirkat ke liye alag-alag miqdaar ka waqt tajweez kiya jata hai — rozana ka waqt (masjid mein ta'leem/mashwara), haftay mein ek din, maheene mein teen din, saal mein chalees din (chillah), aur zindagi mein ek martaba chaar mahine. Yeh sab ikhtiyari hai — koi bhi shakl farz ya majburi nahi.",
+    en:"Different amounts of time are suggested for participation — a daily portion (study/consultation at the mosque), one day a week, three days a month, forty days a year (chillah), and four months once in a lifetime. All of this is voluntary — none of it is obligatory.",
+    ur:"کام میں شرکت کے لیے مختلف مقدار کا وقت تجویز کیا جاتا ہے — روزانہ کا وقت (مسجد میں تعلیم/مشورہ)، ہفتے میں ایک دن، مہینے میں تین دن، سال میں چالیس دن (چلہ)، اور زندگی میں ایک مرتبہ چار مہینے۔ یہ سب اختیاری ہے — کوئی بھی شکل فرض یا مجبوری نہیں۔"},
+  usool2_title:{rm:"Mashwara (Consultation)", en:"Mashwara (Consultation)", ur:"مشورہ"},
+  usool2_p:{rm:"Har faisla mile-julkar mashware se hota hai — chahe woh Ameer ka intekhab ho ya kisi jamaat ka rukh. Ameer ki ita'at Shariah ki hudood ke andar zaroori samjhi jati hai, lekin koi bhi rasmi \"ohda\" ya tanzeemi darja-bandi nahi hoti — sab kaarkun (worker) samjhe jate hain.",
+    en:"Every decision is made collectively through consultation — whether choosing an Ameer or a group's direction. Obedience to the Ameer, within the limits of the Shariah, is considered necessary, but there is no formal \"office\" or organisational hierarchy — everyone is regarded simply as a worker.",
+    ur:"ہر فیصلہ مل جل کر مشورے سے ہوتا ہے — چاہے وہ امیر کا انتخاب ہو یا کسی جماعت کا رخ۔ امیر کی اطاعت شریعت کی حدود کے اندر ضروری سمجھی جاتی ہے، لیکن کوئی بھی رسمی \"عہدہ\" یا تنظیمی درجہ بندی نہیں ہوتی — سب کارکن سمجھے جاتے ہیں۔"},
+  usool3_title:{rm:"Ta'leem", en:"Ta'leem (Study Sessions)", ur:"تعلیم"},
+  usool3_p:{rm:"Har namaz ke baad kuch waqt Fazail-e-A'maal, Muntakhab Ahadees ya Hayat-us-Sahaba jaisi kitabon se ta'leem ke liye rakha jata hai, taake Sahaba (RA) ki zindagi aur amal ke fazail se ta'alluq mazboot ho.",
+    en:"After every prayer, a short time is set aside to read from books such as Fazail-e-A'maal, Muntakhab Ahadith or Hayat-us-Sahaba, so that one's connection to the lives and virtues of the Companions (RA) is strengthened.",
+    ur:"ہر نماز کے بعد کچھ وقت فضائلِ اعمال، منتخب احادیث یا حیاتُ الصحابہ جیسی کتابوں سے تعلیم کے لیے رکھا جاتا ہے، تاکہ صحابہ رضی اللہ عنہم کی زندگی اور عمل کے فضائل سے تعلق مضبوط ہو۔"},
+  usool4_title:{rm:"Masturat (Khawateen) Ka Kaam", en:"The Work of Women (Masturat)", ur:"مستورات (خواتین) کا کام"},
+  usool4_p:{rm:"Khawateen apne gharon aur mahram rishtedaaron ke daayre mein rehte hue is kaam mein hissa leti hain — Shariah ke mutabiq na-mahram se ikhtilaat se bachne ke liye khawateen gasht (ghar-ghar jaana) nahi karti balke apni saheliyon/rishtedaaron ko dawat deti hain, aur mahram ke sath hi kabhi safar karti hain.",
+    en:"Women take part in this work within their homes and among mahram relatives — to avoid mixing with non-mahram men as required by the Shariah, women do not go house to house on gasht, but invite their friends and relatives, and travel only with a mahram.",
+    ur:"خواتین اپنے گھروں اور محرم رشتہ داروں کے دائرے میں رہتے ہوئے اس کام میں حصہ لیتی ہیں — شریعت کے مطابق نامحرم سے اختلاط سے بچنے کے لیے خواتین گشت (گھر گھر جانا) نہیں کرتیں بلکہ اپنی سہیلیوں رشتہ داروں کو دعوت دیتی ہیں، اور محرم کے ساتھ ہی کبھی سفر کرتی ہیں۔"},
+  usool5_title:{rm:"Maal Aur Kharch", en:"Wealth & Expenses", ur:"مال اور خرچ"},
+  usool5_p:{rm:"Har shareek apna kharch khud utaata hai — \"apne maal aur apni jaan\" se nikalne ka usool. Kisi se chanda ya bheek maangna is kaam mein mana samjha jata hai.",
+    en:"Every participant bears their own expense — the principle of going out with \"one's own wealth and one's own self.\" Asking others for donations or charity is considered forbidden in this work.",
+    ur:"ہر شریک اپنا خرچ خود اٹھاتا ہے — \"اپنے مال اور اپنی جان\" سے نکلنے کا اصول۔ کسی سے چندہ یا بھیک مانگنا اس کام میں منع سمجھا جاتا ہے۔"},
+  usool6_title:{rm:"Siyasat Aur Ikhtilafi Masail Se Ijtinaab", en:"Avoiding Politics & Disputed Matters", ur:"سیاست اور اختلافی مسائل سے اجتناب"},
+  usool6_p:{rm:"Yeh kaam jaan-boojh kar siyasi ya firqawarana mubahisay se door rakha jata hai, taake mukhtalif maslak ke log bhi sirf bunyadi Iman-o-Amal ke is kaam mein shamil ho sakein.",
+    en:"This work is deliberately kept away from political or sectarian debate, so that people from different schools of thought can join together in this basic work of faith and practice.",
+    ur:"یہ کام جان بوجھ کر سیاسی یا فرقہ وارانہ مباحث سے دور رکھا جاتا ہے، تاکہ مختلف مسلک کے لوگ بھی صرف بنیادی ایمان و عمل کے اس کام میں شامل ہو سکیں۔"},
+
+  faq_eyebrow:{rm:"Sawal-o-Jawab", en:"Q&A", ur:"سوال و جواب"},
+  faq_title:{rm:"Aam Shubuhat Ka Izala", en:"Addressing Common Doubts", ur:"عام شبہات کا ازالہ"},
+  faq_intro:{rm:"Neeche wo sawalat hain jo aksar puchhe jate hain, Tablighi buzurgon ki taleemat ki roshni mein mukhtasar jawabat ke saath.",
+    en:"Below are questions commonly asked, with brief answers in light of the teachings of the Tablighi elders.",
+    ur:"نیچے وہ سوالات ہیں جو اکثر پوچھے جاتے ہیں، تبلیغی بزرگوں کی تعلیمات کی روشنی میں مختصر جوابات کے ساتھ۔"}
+};
+
+const FAQ_LIST = [
+  { q:{rm:"Sahaba (RA) ne to kafiron ko dawat di thi, hum Musalmanon ko hi kyun dawat de rahe hain?",
+       en:"The Companions (RA) invited disbelievers to Islam — why are we inviting Muslims instead?",
+       ur:"صحابہ رضی اللہ عنہم نے تو کافروں کو دعوت دی تھی، ہم مسلمانوں کو ہی کیوں دعوت دے رہے ہیں؟"},
+    a:{rm:"Sahaba (RA) ne dono kaam kiye — ghair-Muslimon ko Islam ki dawat bhi, aur khud Musalmanon ki tarbiyat-o-islah bhi (jaisa Rasoolullah ﷺ khud Sahaba ki tarbiyat karte thay). Aaj bohot se log naam ke Musalman hain jinhein bunyadi Kalima-Namaz tak nahi aata — is liye pehli tawajjo apne andar ki islah par di gayi, taake mazboot Musalman phir Deen ko aage bhi pahuncha sakein. Ghair-Muslimon ko dawat dena is kaam se khaarij nahi — bohot se log Tablighi mehnat ke zariye Islam laaye hain — lekin \"pehle apna ghar\" ka usool ibtidai tawajjo ka sabab bana.",
+       en:"The Companions (RA) did both — they invited disbelievers to Islam, and they also trained and reformed fellow Muslims, just as the Messenger ﷺ trained his own Companions. Today, many people are Muslim in name only and don't even know the basics of the Kalima and prayer — so the first focus was placed on internal reform, so that strengthened Muslims could then carry the faith further. Inviting non-Muslims is not excluded from this work — many have accepted Islam through Tablighi efforts — but the principle of \"fix your own house first\" shaped the initial focus.",
+       ur:"صحابہ رضی اللہ عنہم نے دونوں کام کیے — غیر مسلموں کو اسلام کی دعوت بھی، اور خود مسلمانوں کی تربیت و اصلاح بھی (جیسا رسول اللہ ﷺ خود صحابہ کی تربیت کرتے تھے)۔ آج بہت سے لوگ نام کے مسلمان ہیں جنہیں بنیادی کلمہ نماز تک نہیں آتا — اس لیے پہلی توجہ اپنے اندر کی اصلاح پر دی گئی، تاکہ مضبوط مسلمان پھر دین کو آگے بھی پہنچا سکیں۔ غیر مسلموں کو دعوت دینا اس کام سے خارج نہیں — بہت سے لوگ تبلیغی محنت کے ذریعے اسلام لائے ہیں — لیکن \"پہلے اپنا گھر\" کا اصول ابتدائی توجہ کا سبب بنا۔"} },
+
+  { q:{rm:"Kya is Jamaat mein shamil hona Shariah mein farz hai?", en:"Is joining this Jamaat obligatory in Shariah?", ur:"کیا اس جماعت میں شامل ہونا شریعت میں فرض ہے؟"},
+    a:{rm:"Nahi. Yeh ek dawati koshish hai, farz ya wajib nahi. Shirkat mukammal taur par ikhtiyari hai.",
+       en:"No. This is a voluntary outreach effort, not an obligation. Participation is entirely optional.",
+       ur:"نہیں۔ یہ ایک دعوتی کوشش ہے، فرض یا واجب نہیں۔ شرکت مکمل طور پر اختیاری ہے۔"} },
+
+  { q:{rm:"Fazail-e-A'maal ki riwayaat kamzor (zaeef) hoti hain — kya yeh sahih hai?", en:"Fazail-e-A'maal's narrations are said to be weak (za'eef) — is this true?", ur:"فضائلِ اعمال کی روایات کمزور (ضعیف) ہوتی ہیں — کیا یہ صحیح ہے؟"},
+    a:{rm:"Kitaab mein zyada tar riwayaat \"fazail\" (amal ki fazilat/targheeb) se ta'alluq rakhti hain, \"masael\" (Shariah ke ahkaam) se nahi. Bohot se Muhaddiseen ke nazdeek zaeef riwayat sirf targheeb ke liye — jab woh kisi masla ya aqeeda ka bayan na kar rahi ho — jaiz samjhi jaati hai. Isi usool par yeh kitaab murattab ki gayi hai.",
+       en:"Most narrations in the book relate to \"fazail\" (virtues and encouragement of good deeds), not \"masael\" (legal rulings). Many hadith scholars hold that a weak narration is permissible when used purely for encouragement — where it does not establish a ruling or belief. The book was compiled on this principle.",
+       ur:"کتاب میں زیادہ تر روایات \"فضائل\" (عمل کی فضیلت/ترغیب) سے تعلق رکھتی ہیں، \"مسائل\" (شریعت کے احکام) سے نہیں۔ بہت سے محدثین کے نزدیک ضعیف روایت صرف ترغیب کے لیے — جب وہ کسی مسئلے یا عقیدے کا بیان نہ کر رہی ہو — جائز سمجھی جاتی ہے۔ اسی اصول پر یہ کتاب مرتب کی گئی ہے۔"} },
+
+  { q:{rm:"Kya sirf Tablighi Jamaat ka tareeqa hi sahih Deen hai, baaki sab ghalat?", en:"Is the Tablighi Jamaat's way the only correct path, and everything else wrong?", ur:"کیا صرف تبلیغی جماعت کا طریقہ ہی صحیح دین ہے، باقی سب غلط؟"},
+    a:{rm:"Nahi — Tablighi Jamaat khud ko koi naya firqa ya mustaqil \"jamaat\" nahi maanti, balke Ummat ki bunyadi islah ki ek \"mehnat\" samjhti hai. Kayi Ulama-e-Deoband aur ahle-sunnat ke Ulama ne is kaam ko mustahsan qaraar diya hai. Lekin yeh bhi sach hai ke kuch doosre Ulama aur maktab-e-fikr (khaas kar Ahle Hadees/Salafi rujhaan rakhne wale) is tareeqe, khaas kar Fazail-e-A'maal ki chand riwayaat aur tanzeemi tareeqa-e-kaar par, tanqeed bhi karte hain. Is app mein Tablighi taleemat unki apni zabaan mein pesh ki gayi hain — is par Ulama mein ikhtilaf mojood hai, aur har Musalman ko apni tehqeeq aur apne mo'tabar Ulama se rehnumai lene ki targheeb di jati hai.",
+       en:"No — the Tablighi Jamaat does not consider itself a new sect or a formal \"organisation,\" but sees itself as one effort at the Ummah's basic reform. Many Deobandi and other Ahl-e-Sunnah scholars have endorsed this work. But it is also true that some other scholars and schools of thought (particularly those with an Ahl-e-Hadith/Salafi orientation) criticise this approach, especially certain narrations in Fazail-e-A'maal and aspects of its organisational method. This app presents Tablighi teachings in their own terms — scholars differ on this, and every Muslim is encouraged to seek guidance from their own trusted scholars.",
+       ur:"نہیں — تبلیغی جماعت خود کو کوئی نیا فرقہ یا مستقل \"جماعت\" نہیں مانتی، بلکہ امت کی بنیادی اصلاح کی ایک \"محنت\" سمجھتی ہے۔ کئی علمائے دیوبند اور اہلِ سنت کے علما نے اس کام کو مستحسن قرار دیا ہے۔ لیکن یہ بھی سچ ہے کہ کچھ دوسرے علما اور مکتبِ فکر (خاص کر اہلِ حدیث/سلفی رجحان رکھنے والے) اس طریقے، خاص کر فضائلِ اعمال کی چند روایات اور تنظیمی طریقہ کار پر، تنقید بھی کرتے ہیں۔ اس ایپ میں تبلیغی تعلیمات ان کی اپنی زبان میں پیش کی گئی ہیں — اس پر علما میں اختلاف موجود ہے، اور ہر مسلمان کو اپنی تحقیق اور اپنے معتبر علما سے رہنمائی لینے کی ترغیب دی جاتی ہے۔"} },
+
+  { q:{rm:"Chaar mahine ya chillay ke liye ghar-parivar chhodna — kya ghar walon ka haq nahi marta?", en:"Leaving family for four months or a chillah — doesn't this neglect the family's rights?", ur:"چار مہینے یا چلے کے لیے گھر پریوار چھوڑنا — کیا گھر والوں کا حق نہیں مرتا؟"},
+    a:{rm:"Taleem mein zor diya jata hai ke pehle ghar walon ki razamandi li jaye aur unki zaroori zimmedariyan (kharch, hifazat) poori karke hi waqt nikala jaye. Shariah mein ghar walon ka haq ada karna khud ek zaroori amal hai — is liye is baat ka khaas khayal rakhne ki talqeen ki jaati hai.",
+       en:"The teaching emphasises taking the family's consent first, and ensuring their necessary needs (expenses, safety) are arranged for before giving time. Fulfilling the rights of one's family is itself a necessary act in the Shariah — so this is stressed with particular care.",
+       ur:"تعلیم میں زور دیا جاتا ہے کہ پہلے گھر والوں کی رضامندی لی جائے اور ان کی ضروری ذمہ داریاں (خرچ، حفاظت) پوری کر کے ہی وقت نکالا جائے۔ شریعت میں گھر والوں کا حق ادا کرنا خود ایک ضروری عمل ہے — اس لیے اس بات کا خاص خیال رکھنے کی تلقین کی جاتی ہے۔"} },
+
+  { q:{rm:"Kya jamaat mein shamil hone ke liye madrasa ki taleem zaroori hai?", en:"Is madrasa education required to join the Jamaat?", ur:"کیا جماعت میں شامل ہونے کے لیے مدرسے کی تعلیم ضروری ہے؟"},
+    a:{rm:"Nahi. Har aam Musalman — chahe woh aalim ho ya na ho — shamil ho sakta hai. Sirf Kalima aur namaz ka bunyadi ilm kaafi samjha jata hai, baaqi seekhte-seekhte hasil hota hai.",
+       en:"No. Any ordinary Muslim — scholar or not — can join. Basic knowledge of the Kalima and prayer is considered sufficient; the rest is learned along the way.",
+       ur:"نہیں۔ ہر عام مسلمان — چاہے وہ عالم ہو یا نہ ہو — شامل ہو سکتا ہے۔ صرف کلمہ اور نماز کا بنیادی علم کافی سمجھا جاتا ہے، باقی سیکھتے سیکھتے حاصل ہوتا ہے۔"} },
+
+  { q:{rm:"Kya gasht mein logon par dabaav ya zabardasti ki jati hai?", en:"Is pressure or force used on people during gasht?", ur:"کیا گشت میں لوگوں پر دباؤ یا زبردستی کی جاتی ہے؟"},
+    a:{rm:"Sikhaya yeh jata hai ke sirf narmi, mohabbat aur ikhtiyar ke saath dawat di jaye. Jawab \"na\" milne par bhi khushdili se dua deke wapas hona adab ka hissa hai — zabardasti is tareeqe mein shamil nahi.",
+       en:"The teaching is to invite only with gentleness, love and free choice. Even if the answer is \"no,\" returning cheerfully with a prayer for the person is part of the etiquette — force plays no part in this method.",
+       ur:"سکھایا یہ جاتا ہے کہ صرف نرمی، محبت اور اختیار کے ساتھ دعوت دی جائے۔ جواب \"نہ\" ملنے پر بھی خوش دلی سے دعا دے کر واپس ہونا ادب کا حصہ ہے — زبردستی اس طریقے میں شامل نہیں۔"} },
+
+  { q:{rm:"Kya yeh kaam siyasi maqsad rakhta hai?", en:"Does this work have political aims?", ur:"کیا یہ کام سیاسی مقصد رکھتا ہے؟"},
+    a:{rm:"Nahi. Is kaam ka elaan-shuda maqsad sirf Iman aur amal ki islah hai; siyasi ya samaji tehreekon mein seedhi shirkat is tareeqe ka hissa nahi rakhi gayi, taake mukhtalif soch ke log bina ikhtilaf ke is kaam mein shamil ho sakein.",
+       en:"No. The stated purpose of this work is solely the reform of faith and practice; direct involvement in political or social movements has not been made part of this method, so that people of different views can take part without dispute.",
+       ur:"نہیں۔ اس کام کا اعلان شدہ مقصد صرف ایمان اور عمل کی اصلاح ہے؛ سیاسی یا سماجی تحریکوں میں سیدھی شرکت اس طریقے کا حصہ نہیں رکھی گئی، تاکہ مختلف سوچ کے لوگ بغیر اختلاف کے اس کام میں شامل ہو سکیں۔"} }
+];
+
+const GASHT_LIST = [
+  {rm:"<b>Niyyat durust karna</b> — sirf Allah ki raza ke liye niklen, kisi tanqeed ya bahas ke iraade se nahi.",
+   en:"<b>Correcting one's intention</b> — go out solely for Allah's pleasure, not to criticise or argue.",
+   ur:"<b>نیت درست کرنا</b> — صرف اللہ کی رضا کے لیے نکلیں، کسی تنقید یا بحث کے ارادے سے نہیں۔"},
+  {rm:"<b>Masjid ke bahar dua</b> — nikalne se pehle Allah se inkisari ke saath dua karein ke jinke paas jaa rahe hain unke dil badal de.",
+   en:"<b>Du'a outside the mosque</b> — before setting out, humbly ask Allah to change the hearts of those you are visiting.",
+   ur:"<b>مسجد کے باہر دعا</b> — نکلنے سے پہلے اللہ سے انکساری کے ساتھ دعا کریں کہ جن کے پاس جا رہے ہیں ان کے دل بدل دے۔"},
+  {rm:"<b>Zimmedariyon ki taqseem</b> — Amir muqarrar ho, kuch log masjid mein zikr aur ta'leem ke liye rukein, kuch Istiqbal ke liye.",
+   en:"<b>Dividing responsibilities</b> — an Ameer is appointed; some stay in the mosque for remembrance and teaching, others for welcoming returning brothers.",
+   ur:"<b>ذمہ داریوں کی تقسیم</b> — امیر مقرر ہو، کچھ لوگ مسجد میں ذکر اور تعلیم کے لیے رکیں، کچھ استقبال کے لیے۔"},
+  {rm:"<b>Chhote-chhote guroh</b> — 2-3 afraad ke guroh banaayein, akela na jaaye.",
+   en:"<b>Small groups</b> — form groups of 2–3 people; no one goes alone.",
+   ur:"<b>چھوٹے چھوٹے گروہ</b> — 2-3 افراد کے گروہ بنائیں، اکیلا نہ جائے۔"},
+  {rm:"<b>Salaam se ibtida</b> — muskurahat aur narmi ke saath salaam karke baat shuru karein.",
+   en:"<b>Begin with Salaam</b> — start the conversation with a smile, gentleness, and the greeting of peace.",
+   ur:"<b>سلام سے ابتدا</b> — مسکراہٹ اور نرمی کے ساتھ سلام کر کے بات شروع کریں۔"},
+  {rm:"<b>Waqt ka lihaz</b> — kisi ka zyada waqt na lein; mukhtasar aur pyaar bhari dawat dein.",
+   en:"<b>Mind their time</b> — don't take up too much of someone's time; keep the invitation brief and warm.",
+   ur:"<b>وقت کا لحاظ</b> — کسی کا زیادہ وقت نہ لیں؛ مختصر اور پیار بھری دعوت دیں۔"},
+  {rm:"<b>Koi bahas ya ilzaam nahi</b> — kisi ke zaati ayb ya galti par seedha ungli na uthayein, sirf namaz aur masjid ki taraf mohabbat se bulayein.",
+   en:"<b>No argument or accusation</b> — don't point directly at a person's personal fault; simply invite them to prayer and the mosque with warmth.",
+   ur:"<b>کوئی بحث یا الزام نہیں</b> — کسی کی ذاتی خامی یا غلطی پر سیدھی انگلی نہ اٹھائیں، صرف نماز اور مسجد کی طرف محبت سے بلائیں۔"},
+  {rm:"<b>Zabardasti mana hai</b> — jawab \"na\" ho to bhi khushdili se dua deke rukhsat hon.",
+   en:"<b>No force allowed</b> — if the answer is \"no,\" leave cheerfully with a prayer for them.",
+   ur:"<b>زبردستی منع ہے</b> — جواب \"نہ\" ہو تو بھی خوش دلی سے دعا دے کر رخصت ہوں۔"},
+  {rm:"<b>Ghar mein sirf mahram ki mojoodgi mein</b> — agar ghar mein sirf khawateen hon to andar na jaayein, adab se wapas hon.",
+   en:"<b>Only enter with a mahram present</b> — if only women are home, do not go inside; withdraw politely.",
+   ur:"<b>گھر میں صرف محرم کی موجودگی میں</b> — اگر گھر میں صرف خواتین ہوں تو اندر نہ جائیں، ادب سے واپس ہوں۔"},
+  {rm:"<b>Sthaniya Imam/masjid intezamiya ka ehteram</b> — kisi masjid mein amal se pehle wahan ke zimmedaran se ijazat lein.",
+   en:"<b>Respect the local Imam/mosque committee</b> — seek permission from those in charge before doing any activity at a mosque.",
+   ur:"<b>مقامی امام/مسجد انتظامیہ کا احترام</b> — کسی مسجد میں عمل سے پہلے وہاں کے ذمہ داران سے اجازت لیں۔"},
+  {rm:"<b>Apni zaban aur nazar ka lihaz</b> — raste mein fuzool baatein, mobile ka istemal ya idhar-udhar dekhne se bachein, zikr mein mashghool rahein.",
+   en:"<b>Guard your tongue and gaze</b> — avoid idle talk, phone use, or looking around on the way; stay occupied with remembrance.",
+   ur:"<b>اپنی زبان اور نظر کا لحاظ</b> — راستے میں فضول باتیں، موبائل کا استعمال یا اِدھر اُدھر دیکھنے سے بچیں، ذکر میں مشغول رہیں۔"},
+  {rm:"<b>Wapsi par shukr</b> — gasht se wapas aakar Allah ka shukr ada karein, natije ki fikr Allah par chhod dein.",
+   en:"<b>Gratitude on return</b> — after returning from gasht, thank Allah, and leave the outcome to Him.",
+   ur:"<b>واپسی پر شکر</b> — گشت سے واپس آ کر اللہ کا شکر ادا کریں، نتیجے کی فکر اللہ پر چھوڑ دیں۔"}
+];
+
+let currentLang = 'rm';
+
+function renderGasht(){
+  const ul = document.getElementById('gashtList');
+  ul.innerHTML = GASHT_LIST.map((item,i) =>
+    `<li><span class="adab-num">${i+1}</span><span>${item[currentLang]}</span></li>`
+  ).join('');
+}
+
+function renderFaq(){
+  const wrap = document.getElementById('faqList');
+  wrap.innerHTML = FAQ_LIST.map((item,i) => `
+    <div class="faq-item${i===0?' open':''}">
+      <div class="faq-q"><div class="faq-mark">+</div><p>${item.q[currentLang]}</p></div>
+      <div class="faq-a"><div class="faq-a-inner">${item.a[currentLang]}</div></div>
+    </div>`).join('');
+  document.querySelectorAll('.faq-item').forEach(el => {
+    el.querySelector('.faq-q').addEventListener('click', () => el.classList.toggle('open'));
+  });
+}
+
+function applyLang(lang){
+  currentLang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(I18N[key]) el.innerHTML = I18N[key][lang] || I18N[key].rm;
+  });
+  document.body.classList.remove('lang-rm','lang-en','lang-ur');
+  document.body.classList.add('lang-' + lang);
+  document.getElementById('htmlRoot').setAttribute('dir', lang === 'ur' ? 'rtl' : 'ltr');
+  document.getElementById('htmlRoot').setAttribute('lang', lang === 'ur' ? 'ur' : 'en');
+  document.querySelectorAll('.lang-switch button').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  renderGasht();
+  renderFaq();
+}
+
+document.querySelectorAll('.lang-switch button').forEach(btn => {
+  btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+});
+
+const navButtons = document.querySelectorAll('nav.bottom button, [data-nav]');
+function goTo(pageKey){
+  document.querySelectorAll('section.page').forEach(s => s.classList.remove('active'));
+  document.getElementById('page-' + pageKey).classList.add('active');
+  document.querySelectorAll('nav.bottom button').forEach(b => b.classList.toggle('active', b.dataset.nav === pageKey));
+  document.getElementById('main').scrollTo({top:0, behavior:'instant'});
+}
+navButtons.forEach(el => {
+  el.addEventListener('click', () => goTo(el.dataset.nav));
+});
+
+document.querySelectorAll('[data-sifat]').forEach(card => {
+  card.querySelector('.sifat-head').addEventListener('click', () => {
+    card.classList.toggle('open');
+  });
+});
+
+applyLang('rm');
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
