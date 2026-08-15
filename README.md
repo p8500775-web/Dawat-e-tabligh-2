@@ -2,7 +2,7 @@
 
 A trilingual (Urdu / Roman Urdu / English) Progressive Web App presenting the history, core teachings, and etiquette of Dawat-e-Tabligh — installable on any phone with no app-store download required.
 
-**🔗 Live demo:** https://your-username.github.io/dawat-e-tabligh/
+**🔗 Live demo:** https://p8500775-web.github.io/dawat-e-tabligh/
 
 ![Home screen](screenshots/1-home-roman.png)
 
@@ -38,7 +38,7 @@ python3 -m http.server 8000
 
 ## Install as an App
 
-1. Open the [live demo link](https://your-username.github.io/dawat-e-tabligh/) on your phone
+1. Open the [live demo link](https://p8500775-web.github.io/dawat-e-tabligh/) on your phone
 2. Tap your browser's menu → **Add to Home Screen**
 3. Launch it like any other app — full screen, no browser bar
 
